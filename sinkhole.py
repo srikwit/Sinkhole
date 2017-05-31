@@ -3,7 +3,7 @@ import requests
 import urllib3
 import time
 import datetime
-
+import socket
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -99,10 +99,31 @@ def make_statistics_without_online_consideration():
         print(count,top_level_domain_sorted[count])
 
 
+def get_online_status():
+    shared_ip = {}
+    count = 0
+    with open("sanitized_split_hostsab","r+") as hosts:
+        for host in hosts.readlines():
+            try:
+                ip = socket.gethostbyname(host.rstrip("\r\n"))
+                if ip in shared_ip:
+                    shared_ip[ip].append(host)
+                else:
+                    shared_ip[ip] = [host]
+                with open("sanitized_online_hosts.txt","a+") as online_hosts:
+                    online_hosts.write(host)
+            except Exception as e:
+                continue
+            count += 1
+            if count%100 == 0:
+                print("Finished "+str(count)+" hosts!")
+    with open("ip_domain_association.txt","a+") as associate:
+        for ip in sorted(shared_ip.keys()):
+            associate.write(ip+":"+','.join(shared_ip[ip]))
 
 
-
-domain_fetcher()
-domain_sanitizer()
-generate_hosts_file_contents()
-make_statistics_without_online_consideration()
+#domain_fetcher()
+#domain_sanitizer()
+#generate_hosts_file_contents()
+#make_statistics_without_online_consideration()
+get_online_status()
