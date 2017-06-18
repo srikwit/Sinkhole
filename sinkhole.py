@@ -102,7 +102,7 @@ def make_statistics_without_online_consideration():
 def get_online_status():
     shared_ip = {}
     count = 0
-    with open("sanitized_split_hostsap","r+") as hosts:
+    with open("sanitized_split_hostsaq","r+") as hosts:
         for host in hosts.readlines():
             try:
                 ip = socket.gethostbyname(host.rstrip("\r\n"))
