@@ -121,9 +121,27 @@ def get_online_status():
         for ip in sorted(shared_ip.keys()):
             associate.write(ip+":"+','.join(shared_ip[ip]))
 
+def make_statistics_with_online_consideration():
+    unique_ips = {}
+    with open("ip_domain_association.txt","r+") as f:
+        for line in f.readlines():
+            current = line.rstrip("\r\n").split(":")
+            ip = current[0]
+            domains = current[1]
+            if ip in unique_ips:
+                unique_ips[ip] += ',' + domains
+            else:
+                unique_ips[ip] = domains
+    with open("sanitized_online_ips","a+") as f:
+        for ip in unique_ips:
+            f.write(ip+"\r\n")
+    with open("unique_ip_domain_association.txt","a+") as f:
+        for ip in unique_ips:
+            f.write(ip+":"+unique_ips[ip]+"\r\n")
 
 #domain_fetcher()
 #domain_sanitizer()
 #generate_hosts_file_contents()
 #make_statistics_without_online_consideration()
-get_online_status()
+#get_online_status()
+make_statistics_with_online_consideration()
