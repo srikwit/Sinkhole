@@ -68,7 +68,7 @@ def domain_sanitizer():
 
 def generate_hosts_file_contents():
     with open("hosts.txt","a+") as hosts:
-        with open("sanitized_hosts.txt","r+") as sanitized_hosts:
+        with open("sanitized_unique_hosts.txt","r+") as sanitized_hosts:
             for host in sanitized_hosts:
                 hosts.write("127.0.0.1 "+host)
 
@@ -141,7 +141,7 @@ def make_statistics_with_online_consideration():
 
 #domain_fetcher()
 #domain_sanitizer()
-#generate_hosts_file_contents()
+generate_hosts_file_contents()
 #make_statistics_without_online_consideration()
 #get_online_status()
-make_statistics_with_online_consideration()
+#make_statistics_with_online_consideration()
